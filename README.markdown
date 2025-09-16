@@ -17,7 +17,7 @@ Sauron is a C++-based tool for real-time monitoring and management of Linux serv
 - **Alerting Service**: C++ module for rule-based alerts, notifications via email/HTTP.
 
 ## Installation
-1. Clone the repository: `git clone https://github.com/<your-repo>/sauron.git`
+1. Clone the repository: `git clone https://github.com/anoliveiraM/sauron.git`
 2. Install dependencies: C++17, SQLite, Crow, Svelte (or React), Tailwind CSS.
 3. Build client agent: `make agent` (compiles as RPM/DEB for supported distros).
 4. Build backend: `make backend`.
