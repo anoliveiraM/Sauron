@@ -1,0 +1,47 @@
+cmake_minimum_required(VERSION 3.10)
+project(SauronAgent VERSION 1.0 LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+# Find required packages
+find_package(CURL REQUIRED)
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(INOTIFY REQUIRED libinotify)
+
+# Include directories
+include_directories(${CURL_INCLUDE_DIRS} ${INOTIFY_INCLUDE_DIRS})
+
+# Source files
+set(SOURCES
+    main.cpp
+    config/config.cpp
+    metrics/collector.cpp
+    metrics/pusher.cpp
+    logs/monitor.cpp
+    logs/filter.cpp
+    management/executor.cpp
+    management/handlers.cpp
+    utils/logging.cpp
+    utils/error.cpp
+)
+
+# Add executable
+add_executable(sauron_agent ${SOURCES})
+
+# Link libraries
+target_link_libraries(sauron_agent PRIVATE ${CURL_LIBRARIES} ${INOTIFY_LIBRARIES} stdc++fs)
+
+# Compiler options
+target_compile_options(sauron_agent PRIVATE -Wall -Wextra -pthread)
+
+# Install target (for RPM/DEB)
+install(TARGETS sauron_agent DESTINATION bin)
+
+# Enable testing
+enable_testing()
+find_package(Catch2 REQUIRED)
+add_executable(tests test/main_test.cpp test/collector_test.cpp)
+target_link_libraries(tests PRIVATE Catch2::Catch2 sauron_agent)
+add_test(NAME AllTests COMMAND tests)

@@ -1,0 +1,25 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/Client",
+                "${workspaceFolder}/Client/src/utils",
+                "${workspaceFolder}/Client/src/config",
+                "${workspaceFolder}/Client/src/metrics",
+                "${workspaceFolder}/Client/src/logs",
+                "${workspaceFolder}/Client/src/management",
+                "/usr/include",
+                "/usr/include/c++/**",
+                "/usr/local/include",
+                "/usr/lib/gcc/x86_64-linux-gnu/13/include"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/g++",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "gcc-x64"
+        }
+    ],
+    "version": 4
+}
