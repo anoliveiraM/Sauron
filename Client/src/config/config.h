@@ -50,6 +50,11 @@ struct DeviceInfo {
 
 };
 
+struct OnboardingInfo {
+    std::string deviceId;
+    std::string tenantId;
+};
+
 class Config{
 public:
     static Config& getInstance();
@@ -63,7 +68,7 @@ public:
     bool isOnboarded() const;
 
     // Load onboarding info from onboarding file
-    bool getOnboardingInfo();
+    std::optional<OnboardingInfo> getOnboardingInfo();
 
     // Update all device info
     void updateDeviceInfo(const std::string& deviceId, 
@@ -76,9 +81,9 @@ public:
     std::optional<DeviceInfo> getDeviceInfo() const;
 
     // Necessity methods to get MacAddress, IpAddress, DeviceName
-    std::string getDeviceMacAddress();
-    std::string getDeviceIpAddress();
-    std::string getDeviceName();
+    std::string getDeviceMacAddress() const;
+    std::string getDeviceIpAddress() const;
+    std::string getDeviceName() const;
 
     ~Config() = default;
 
