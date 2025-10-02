@@ -17,14 +17,12 @@ struct NetworkInfo {
 
 class Config {
 public:
-    static Config& getInstance();
-    void updateDeviceInfo(const NetworkInfo& info);
+    static Config& getInstance(const std::string& interface);
     std::optional<NetworkInfo> getDeviceInfo() const;
     std::optional<OnboardingInfo> getOnboardingInfo() const;
-    void fetchDeviceInfo();
+    void fetchDeviceInfo(const std::string& interface);
     void fetchOnboardingInfo();
     NetworkInfo getDeviceNetworkInfo(const std::string& interface);
-    std::string getDeviceHostName(const std::string& interface);
 
 
 

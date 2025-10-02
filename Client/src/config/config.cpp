@@ -12,13 +12,13 @@
 
 
 // Return instance of singleton
-Config& Config::getInstance() {
+Config& Config::getInstance(const std::string& interface) {
     static Config instance;
     static bool initialized = false;
     if (!initialized) {
         // Log initialization
         Logger::getInstance().log(Logger::INFO, "Initializing Config singleton!");
-        instance.fetchDeviceInfo();
+        instance.fetchDeviceInfo(interface);
         instance.fetchOnboardingInfo();
         initialized = true;
     }
@@ -26,11 +26,6 @@ Config& Config::getInstance() {
 }
 
 Config::Config() = default;
-
-void Config::updateDeviceInfo(const NetworkInfo& info) {
-    std::lock_guard<std::mutex> lock(mutex_);
-    deviceInfo_ = info; 
-}
 
 std::optional<NetworkInfo> Config::getDeviceInfo() const {
     std::lock_guard<std::mutex> lock(mutex_);
@@ -43,6 +38,9 @@ std::optional<OnboardingInfo> Config::getOnboardingInfo() const {
 }
 
 void Config::fetchOnboardingInfo() {
+    // Make sure there's only one instance fetching device info
+    std::lock_guard<std::mutex> lock(mutex_);
+
     try {
         OnboardingInfo info;
 
@@ -69,6 +67,7 @@ void Config::fetchOnboardingInfo() {
 }
 
 NetworkInfo Config::getDeviceNetworkInfo(const std::string& interface) {
+    std::lock_guard<std::mutex> lock(mutex_);
     int fd = socket(AF_INET, SOCK_DGRAM, 0);
     if (fd < 0) {
         Logger::getInstance().log(Logger::ERROR, "Failed to open file descriptor for socket! Returning empty string");
@@ -100,7 +99,7 @@ NetworkInfo Config::getDeviceNetworkInfo(const std::string& interface) {
     std::memset(&ifr, 0, sizeof(ifr));
     std::strncpy(ifr.ifr_name, interface.c_str(), IFNAMSIZ - 1);
 
-    if(ioctl(fd , SIOCGIFHWADDR, &ifr) < 0) {
+    if(ioctl(fd , SIOCGIFADDR, &ifr) < 0) {
         close(fd);
         return netInfo;
     }
@@ -123,18 +122,8 @@ NetworkInfo Config::getDeviceNetworkInfo(const std::string& interface) {
     return netInfo;
 }
 
-void Config::fetchDeviceInfo() {
-    try {
-        Logger::getInstance().log(Logger::INFO, "Initiating flow to grab device info");
-
-        // std::string macAddress;
-        // std::string ipAddress;
-        // std::string deviceName;
-        
-        // Start with MacAddress
-
-
-    } catch (std::exception& ex) {
-        Logger::getInstance().log(Logger::ERROR, "Unexpected error occurred while getting device info");
-    }
+void Config::fetchDeviceInfo(const std::string& interface) {
+    Logger::getInstance().log(Logger::INFO, "Initiating flow to grab device info");
+    std::lock_guard<std::mutex> lock(mutex_);
+    deviceInfo_ = getDeviceNetworkInfo(interface);
 }
