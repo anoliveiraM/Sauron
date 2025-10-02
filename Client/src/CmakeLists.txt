@@ -8,6 +8,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 # Find required packages
 find_package(CURL REQUIRED)
 find_package(PkgConfig REQUIRED)
+find_package(nlohmann_json REQUIRED)
 pkg_check_modules(INOTIFY REQUIRED libinotify)
 
 # Include directories
@@ -31,7 +32,7 @@ set(SOURCES
 add_executable(sauron_agent ${SOURCES})
 
 # Link libraries
-target_link_libraries(sauron_agent PRIVATE ${CURL_LIBRARIES} ${INOTIFY_LIBRARIES} stdc++fs)
+target_link_libraries(sauron_agent PRIVATE ${CURL_LIBRARIES} ${INOTIFY_LIBRARIES} nlohmann_json::nlohmann_json stdc++fs)
 
 # Compiler options
 target_compile_options(sauron_agent PRIVATE -Wall -Wextra -pthread)

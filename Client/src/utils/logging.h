@@ -1,25 +1,31 @@
 #ifndef LOGGING_H
 #define LOGGING_H
 
-#include <string>
 #include <fstream>
+#include <string>
 #include <mutex>
-
-#include "../consts.h"
 
 class Logger {
 public:
-    enum Level {INFO, ERROR, DEBUG};
+    enum Level {
+        INFO = 0,
+        ERROR = 1,
+        DEBUG = 2
+    };
 
     static Logger& getInstance();
-    bool isInitialized_ = false;
-    void log (Level level, const std::string& message);
+    void log(Level level, const std::string& message);
+    
     ~Logger();
 
 private:
     Logger();
+    Logger(const Logger&) = delete;
+    Logger& operator=(const Logger&) = delete;
+
     std::ofstream logFile_;
     std::mutex logMutex_;
+    bool isInitialized_ = false;
 };
 
-#endif
+#endif // LOGGING_H

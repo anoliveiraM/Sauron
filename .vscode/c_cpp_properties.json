@@ -4,6 +4,7 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/Client",
+                "${workspaceFolder}/Client/inc",
                 "${workspaceFolder}/Client/src/utils",
                 "${workspaceFolder}/Client/src/config",
                 "${workspaceFolder}/Client/src/metrics",
