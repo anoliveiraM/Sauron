@@ -82,7 +82,7 @@ int main (int argc, char* argv[]) {
     // });
 
 
-    std:thread management_thread([]() {
+    std::thread management_thread([]() {
         ManagementExecutor executor;
         while(!shutdown_flag) {
             executor.listen();
@@ -101,10 +101,7 @@ int main (int argc, char* argv[]) {
     metrics_thread.join();
     // logs_thread.join();
     management_thread.join();
-
-    // Cleanup
-    Config::destroyInstance();
-
+    
     return 0;
 
 }
